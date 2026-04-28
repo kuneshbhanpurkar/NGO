@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("user")
+  area      String?
+  createdAt DateTime  @default(now())
+  problems  Problem[]
+  tasks     Task[]
+}
+
+model Problem {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  area        String
+  category    String
+  description String
+  photoUrl    String?
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  tasks       Task[]
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  problemId   String
+  volunteerId String
+  status      String    @default("pending")
+  deadline    DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  problem     Problem   @relation(fields: [problemId], references: [id])
+  volunteer   User      @relation(fields: [volunteerId], references: [id])
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  body        String
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+}
