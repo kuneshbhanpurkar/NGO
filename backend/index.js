@@ -28,6 +28,12 @@ app.use('/api/volunteers', require('./routes/volunteers'));
 app.use('/api/news', require('./routes/news'));
 app.use('/api/analytics', require('./routes/analytics'));
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err);
+  res.status(500).json({ error: 'Internal Server Error', details: err.message });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
